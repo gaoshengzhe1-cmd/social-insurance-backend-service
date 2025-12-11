@@ -49,12 +49,30 @@ public class SocialInsuranceController {
      * 将应用层DTO转换为API层DTO
      */
     private SocialInsuranceDto convertToApiDto(SocialInsuranceApplicationDto applicationDto) {
+        SocialInsuranceApplicationDto.CostDetail employeeCost = applicationDto.getEmployeeCost();
+        SocialInsuranceApplicationDto.CostDetail employerCost = applicationDto.getEmployerCost();
+
+        SocialInsuranceDto.CostDetail employeeCostDto = employeeCost != null ? 
+            SocialInsuranceDto.CostDetail.builder()
+                .healthCostWithNoCare(employeeCost.getHealthCostWithNoCare())
+                .careCost(employeeCost.getCareCost())
+                .pension(employeeCost.getPension())
+                .employmentInsurance(employeeCost.getEmploymentInsurance())
+                .incomeTax(employeeCost.getIncomeTax())
+                .build() : null;
+
+        SocialInsuranceDto.CostDetail employerCostDto = employerCost != null ? 
+            SocialInsuranceDto.CostDetail.builder()
+                .healthCostWithNoCare(employerCost.getHealthCostWithNoCare())
+                .careCost(employerCost.getCareCost())
+                .pension(employerCost.getPension())
+                .employmentInsurance(employerCost.getEmploymentInsurance())
+                .incomeTax(null) // 雇主没有所得税
+                .build() : null;
+
         return SocialInsuranceDto.builder()
-                .healthCostWithNoCare(applicationDto.getHealthCostWithNoCare())
-                .careCost(applicationDto.getCareCost())
-                .pension(applicationDto.getPension())
-                .employmentInsurance(applicationDto.getEmploymentInsurance())
-                .incomeTax(applicationDto.getIncomeTax())
+                .employeeCost(employeeCostDto)
+                .employerCost(employerCostDto)
                 .build();
     }
 }

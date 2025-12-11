@@ -42,14 +42,30 @@ public class SocialInsuranceApplicationServiceImpl implements SocialInsuranceApp
      * 将领域层DTO转换为应用层DTO
      */
     private SocialInsuranceApplicationDto convertToApplicationDto(SocialInsuranceDomainDto domainDto) {
-        SocialInsuranceDomainDto.CostDetail employeeCost = domainDto.getEmployeeCost();
+        SocialInsuranceDomainDto.CostDetail domainEmployeeCost = domainDto.getEmployeeCost();
+        SocialInsuranceDomainDto.CostDetail domainEmployerCost = domainDto.getEmployerCost();
+
+        SocialInsuranceApplicationDto.CostDetail employeeCost = domainEmployeeCost != null ? 
+            SocialInsuranceApplicationDto.CostDetail.builder()
+                .healthCostWithNoCare(domainEmployeeCost.getHealthCostWithNoCare())
+                .careCost(domainEmployeeCost.getCareCost())
+                .pension(domainEmployeeCost.getPension())
+                .employmentInsurance(domainEmployeeCost.getEmploymentInsurance())
+                .incomeTax(domainEmployeeCost.getIncomeTax())
+                .build() : null;
+
+        SocialInsuranceApplicationDto.CostDetail employerCost = domainEmployerCost != null ?
+            SocialInsuranceApplicationDto.CostDetail.builder()
+                .healthCostWithNoCare(domainEmployerCost.getHealthCostWithNoCare())
+                .careCost(domainEmployerCost.getCareCost())
+                .pension(domainEmployerCost.getPension())
+                .employmentInsurance(domainEmployerCost.getEmploymentInsurance())
+                .incomeTax(null) // 雇主没有所得税
+                .build() : null;
 
         return SocialInsuranceApplicationDto.builder()
-                .healthCostWithNoCare(employeeCost != null ? employeeCost.getHealthCostWithNoCare() : null)
-                .careCost(employeeCost != null ? employeeCost.getCareCost() : null)
-                .pension(employeeCost != null ? employeeCost.getPension() : null)
-                .employmentInsurance(employeeCost != null ? employeeCost.getEmploymentInsurance() : null)
-                .incomeTax(employeeCost != null ? employeeCost.getIncomeTax() : null)
+                .employeeCost(employeeCost)
+                .employerCost(employerCost)
                 .build();
     }
 }

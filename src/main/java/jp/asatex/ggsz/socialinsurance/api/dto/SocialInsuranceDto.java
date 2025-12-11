@@ -16,27 +16,43 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 public class SocialInsuranceDto {
     /**
-     * 无介护健康保险金额
+     * 雇员承担的费用
      */
-    private BigDecimal healthCostWithNoCare;
-    
+    private CostDetail employeeCost;
+
     /**
-     * 介护保险金额
+     * 雇主承担的费用
      */
-    private BigDecimal careCost;
-    
-    /**
-     * 厚生年金金额
-     */
-    private BigDecimal pension;
-    
-    /**
-     * 雇用保险金额
-     */
-    private BigDecimal employmentInsurance;
-    
-    /**
-     * 所得税金额
-     */
-    private BigDecimal incomeTax;
+    private CostDetail employerCost;
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class CostDetail {
+        /**
+         * 无介护健康保险金额
+         */
+        private BigDecimal healthCostWithNoCare;
+        
+        /**
+         * 介护保险金额
+         */
+        private BigDecimal careCost;
+        
+        /**
+         * 厚生年金金额
+         */
+        private BigDecimal pension;
+
+        /**
+         * 雇用保险金额
+         */
+        private BigDecimal employmentInsurance;
+
+        /**
+         * 所得税金额（仅雇员有）
+         */
+        private BigDecimal incomeTax;
+    }
 }
